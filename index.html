@@ -1,0 +1,1285 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nour Zaki — Computer Science · ML & Computer Vision</title>
+  <meta name="description"
+    content="Nour Zaki — Computer Science student building machine-learning and computer-vision systems, from medical-imaging AI to automation pipelines.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --paper: #f5f2ea;
+      --paper-2: #efe9dd;
+      --ink: #1a1916;
+      --ink-soft: #56524a;
+      --line: #d9d2c4;
+      --line-soft: #e6e0d3;
+      --accent: #0f6d59;
+      --accent-deep: #0a4d3f;
+      --clay: #b5502f;
+      --maxw: 1180px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box
+    }
+
+    html {
+      scroll-behavior: smooth
+    }
+
+    body {
+      background: var(--paper);
+      color: var(--ink);
+      font-family: "Hanken Grotesk", sans-serif;
+      font-size: 17px;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* grain texture overlay */
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9999;
+      opacity: .04;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+
+    ::selection {
+      background: var(--accent);
+      color: var(--paper)
+    }
+
+    .mono {
+      font-family: "JetBrains Mono", monospace;
+      font-size: .72rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--ink-soft)
+    }
+
+    .wrap {
+      max-width: var(--maxw);
+      margin: 0 auto;
+      padding: 0 32px
+    }
+
+    .serif {
+      font-family: "Fraunces", serif
+    }
+
+    /* ---------- NAV ---------- */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 32px;
+      backdrop-filter: blur(8px);
+      background: linear-gradient(to bottom, rgba(245, 242, 234, .92), rgba(245, 242, 234, .0));
+      transition: background .3s;
+    }
+
+    nav.scrolled {
+      background: rgba(245, 242, 234, .95);
+      border-bottom: 1px solid var(--line-soft)
+    }
+
+    .logo {
+      font-family: "Fraunces", serif;
+      font-weight: 600;
+      font-size: 1.25rem;
+      letter-spacing: -.01em
+    }
+
+    .logo span {
+      color: var(--accent)
+    }
+
+    .navlinks {
+      display: flex;
+      gap: 26px
+    }
+
+    .navlinks a {
+      font-family: "JetBrains Mono", monospace;
+      font-size: .7rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      text-decoration: none;
+      position: relative;
+      padding: 4px 0;
+      transition: color .25s;
+    }
+
+    .navlinks a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      height: 1px;
+      width: 0;
+      background: var(--accent);
+      transition: width .3s
+    }
+
+    .navlinks a:hover {
+      color: var(--ink)
+    }
+
+    .navlinks a:hover::after {
+      width: 100%
+    }
+
+    @media(max-width:720px) {
+      .navlinks {
+        display: none
+      }
+    }
+
+    /* ---------- HERO ---------- */
+    header {
+      padding: 170px 0 90px;
+      position: relative
+    }
+
+    .hero-meta {
+      display: flex;
+      justify-content: space-between;
+      border-top: 1px solid var(--ink);
+      border-bottom: 1px solid var(--line);
+      padding: 10px 0;
+      margin-bottom: 48px
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 40px;
+      align-items: end
+    }
+
+    @media(max-width:860px) {
+      .hero-grid {
+        grid-template-columns: 1fr;
+        gap: 28px
+      }
+    }
+
+    h1.name {
+      font-family: "Fraunces", serif;
+      font-weight: 500;
+      font-size: clamp(3.4rem, 9vw, 7.4rem);
+      line-height: .94;
+      letter-spacing: -.025em;
+    }
+
+    h1.name em {
+      font-style: italic;
+      color: var(--accent)
+    }
+
+    .tagline {
+      font-size: clamp(1.05rem, 2.2vw, 1.4rem);
+      max-width: 34ch;
+      color: var(--ink-soft);
+      margin-top: 26px;
+      line-height: 1.5
+    }
+
+    .tagline b {
+      color: var(--ink);
+      font-weight: 600
+    }
+
+    .hero-side {
+      text-align: right;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      padding-bottom: 8px
+    }
+
+    @media(max-width:860px) {
+      .hero-side {
+        text-align: left
+      }
+    }
+
+    .hero-side .label {
+      display: block
+    }
+
+    .hero-side .val {
+      font-family: "Fraunces", serif;
+      font-size: 1.05rem;
+      color: var(--ink)
+    }
+
+    .cta-row {
+      display: flex;
+      gap: 16px;
+      margin-top: 42px;
+      flex-wrap: wrap
+    }
+
+    .btn {
+      font-family: "JetBrains Mono", monospace;
+      font-size: .72rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      text-decoration: none;
+      padding: 13px 22px;
+      border-radius: 2px;
+      transition: all .25s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-fill {
+      background: var(--ink);
+      color: var(--paper)
+    }
+
+    .btn-fill:hover {
+      background: var(--accent)
+    }
+
+    .btn-ghost {
+      border: 1px solid var(--line);
+      color: var(--ink)
+    }
+
+    .btn-ghost:hover {
+      border-color: var(--ink);
+      background: var(--paper-2)
+    }
+
+    /* ---------- SECTION SHELL ---------- */
+    section {
+      padding: 80px 0;
+      position: relative
+    }
+
+    .sec-head {
+      display: flex;
+      align-items: baseline;
+      gap: 18px;
+      margin-bottom: 48px
+    }
+
+    .sec-head .num {
+      font-family: "JetBrains Mono", monospace;
+      font-size: .8rem;
+      color: var(--accent)
+    }
+
+    .sec-head h2 {
+      font-family: "Fraunces", serif;
+      font-weight: 500;
+      font-size: clamp(1.8rem, 4vw, 2.6rem);
+      letter-spacing: -.02em
+    }
+
+    .sec-head .rule {
+      flex: 1;
+      height: 1px;
+      background: var(--line);
+      align-self: center;
+      margin-bottom: 4px
+    }
+
+    /* ---------- ABOUT ---------- */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 56px
+    }
+
+    @media(max-width:860px) {
+      .about-grid {
+        grid-template-columns: 1fr;
+        gap: 36px
+      }
+    }
+
+    .about-grid p {
+      font-size: 1.15rem;
+      line-height: 1.7;
+      margin-bottom: 22px;
+      max-width: 54ch
+    }
+
+    .about-grid p b {
+      font-weight: 600;
+      color: var(--accent-deep)
+    }
+
+    .facts {
+      border-left: 2px solid var(--accent);
+      padding-left: 24px;
+      align-self: start
+    }
+
+    .fact {
+      margin-bottom: 22px
+    }
+
+    .fact .k {
+      display: block;
+      margin-bottom: 3px
+    }
+
+    .fact .v {
+      font-family: "Fraunces", serif;
+      font-size: 1.15rem;
+      line-height: 1.35
+    }
+
+    /* ---------- WORK INDEX ---------- */
+    .filter-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 36px
+    }
+
+    .chip {
+      font-family: "JetBrains Mono", monospace;
+      font-size: .68rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      padding: 7px 14px;
+      border: 1px solid var(--line);
+      border-radius: 99px;
+      background: transparent;
+      color: var(--ink-soft);
+      cursor: pointer;
+      transition: all .2s;
+    }
+
+    .chip:hover {
+      border-color: var(--ink);
+      color: var(--ink)
+    }
+
+    .chip.active {
+      background: var(--ink);
+      color: var(--paper);
+      border-color: var(--ink)
+    }
+
+    .proj {
+      border-top: 1px solid var(--line);
+      transition: opacity .3s
+    }
+
+    .proj:last-child {
+      border-bottom: 1px solid var(--line)
+    }
+
+    .proj-head {
+      display: grid;
+      grid-template-columns: 54px 1fr auto;
+      gap: 24px;
+      align-items: center;
+      padding: 26px 12px;
+      cursor: pointer;
+      transition: background .3s, padding .3s;
+    }
+
+    .proj-head:hover {
+      background: var(--paper-2);
+      padding-left: 24px;
+      padding-right: 24px
+    }
+
+    .proj-num {
+      font-family: "JetBrains Mono", monospace;
+      font-size: .8rem;
+      color: var(--ink-soft)
+    }
+
+    .proj-title {
+      font-family: "Fraunces", serif;
+      font-size: clamp(1.3rem, 2.6vw, 1.7rem);
+      font-weight: 500;
+      letter-spacing: -.01em;
+      line-height: 1.15
+    }
+
+    .proj-cat {
+      display: block;
+      margin-top: 6px;
+      color: var(--accent)
+    }
+
+    .proj-meta {
+      text-align: right;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      align-items: flex-end
+    }
+
+    .proj-year {
+      font-family: "JetBrains Mono", monospace;
+      font-size: .78rem;
+      color: var(--ink-soft)
+    }
+
+    .proj-toggle {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 1.3rem;
+      color: var(--accent);
+      transition: transform .35s;
+      line-height: 1
+    }
+
+    .proj.open .proj-toggle {
+      transform: rotate(45deg)
+    }
+
+    @media(max-width:680px) {
+      .proj-head {
+        grid-template-columns: 36px 1fr;
+        gap: 14px
+      }
+
+      .proj-meta {
+        display: none
+      }
+    }
+
+    .proj-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height .45s ease
+    }
+
+    .proj-body-inner {
+      padding: 0 12px 30px 78px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 40px;
+      align-items: start
+    }
+
+    @media(max-width:680px) {
+      .proj-body-inner {
+        grid-template-columns: 1fr;
+        padding-left: 50px
+      }
+    }
+
+    .proj-desc {
+      font-size: 1.05rem;
+      color: var(--ink-soft);
+      max-width: 62ch;
+      line-height: 1.65
+    }
+
+    .proj-desc b {
+      color: var(--ink);
+      font-weight: 600
+    }
+
+    .tech {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-top: 18px
+    }
+
+    .tech span {
+      font-family: "JetBrains Mono", monospace;
+      font-size: .66rem;
+      letter-spacing: .06em;
+      padding: 5px 10px;
+      background: var(--paper-2);
+      border: 1px solid var(--line-soft);
+      border-radius: 3px;
+      color: var(--ink-soft)
+    }
+
+    .proj-link {
+      font-family: "JetBrains Mono", monospace;
+      font-size: .72rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--ink);
+      text-decoration: none;
+      border-bottom: 1px solid var(--accent);
+      padding-bottom: 2px;
+      white-space: nowrap;
+      transition: color .2s
+    }
+
+    .proj-link:hover {
+      color: var(--accent)
+    }
+
+    /* ---------- TOOLKIT ---------- */
+    .toolkit {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--line);
+      border: 1px solid var(--line)
+    }
+
+    @media(max-width:860px) {
+      .toolkit {
+        grid-template-columns: 1fr
+      }
+    }
+
+    .tool-col {
+      background: var(--paper);
+      padding: 30px 26px
+    }
+
+    .tool-col h3 {
+      font-family: "JetBrains Mono", monospace;
+      font-size: .72rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 18px
+    }
+
+    .tool-col ul {
+      list-style: none
+    }
+
+    .tool-col li {
+      font-family: "Fraunces", serif;
+      font-size: 1.1rem;
+      padding: 7px 0;
+      border-bottom: 1px solid var(--line-soft);
+      color: var(--ink)
+    }
+
+    .tool-col li:last-child {
+      border-bottom: none
+    }
+
+    /* ---------- EXPERIENCE ---------- */
+    .exp {
+      display: grid;
+      grid-template-columns: 210px 1fr;
+      gap: 32px;
+      padding: 30px 0;
+      border-top: 1px solid var(--line)
+    }
+
+    .exp:last-child {
+      border-bottom: 1px solid var(--line)
+    }
+
+    .exp-meta .mono {
+      color: var(--accent);
+      display: block
+    }
+
+    .exp-meta .org {
+      font-family: "Fraunces", serif;
+      font-size: 1.15rem;
+      margin-top: 6px;
+      line-height: 1.25;
+      display: block
+    }
+
+    .exp-body h3 {
+      font-family: "Fraunces", serif;
+      font-size: 1.35rem;
+      font-weight: 500;
+      letter-spacing: -.01em;
+      margin-bottom: 10px
+    }
+
+    .exp-body p {
+      color: var(--ink-soft);
+      max-width: 62ch;
+      font-size: 1.02rem;
+      line-height: 1.6
+    }
+
+    .exp-extra {
+      margin-top: 26px;
+      padding-top: 20px;
+      border-top: 1px dashed var(--line)
+    }
+
+    @media(max-width:680px) {
+      .exp {
+        grid-template-columns: 1fr;
+        gap: 10px
+      }
+    }
+
+    /* ---------- CONTACT ---------- */
+    .contact {
+      background: var(--ink);
+      color: var(--paper);
+      margin-top: 40px
+    }
+
+    .contact .wrap {
+      padding-top: 90px;
+      padding-bottom: 70px
+    }
+
+    .contact .mono {
+      color: #9d978a
+    }
+
+    .contact h2 {
+      font-family: "Fraunces", serif;
+      font-weight: 500;
+      font-size: clamp(2.2rem, 6vw, 4rem);
+      letter-spacing: -.025em;
+      line-height: 1.05;
+      margin: 18px 0 36px
+    }
+
+    .contact h2 em {
+      font-style: italic;
+      color: #5fd3b8
+    }
+
+    .contact-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px
+    }
+
+    .contact-links a {
+      font-family: "JetBrains Mono", monospace;
+      font-size: .78rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--paper);
+      text-decoration: none;
+      padding: 13px 22px;
+      border: 1px solid #3a382f;
+      border-radius: 2px;
+      transition: all .25s;
+    }
+
+    .contact-links a:hover {
+      background: #5fd3b8;
+      color: var(--ink);
+      border-color: #5fd3b8
+    }
+
+    footer {
+      background: var(--ink);
+      color: #7a766b;
+      padding: 26px 0 30px
+    }
+
+    footer .wrap {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px
+    }
+
+    footer .mono {
+      color: #7a766b
+    }
+
+    /* reveal animation */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity .7s ease, transform .7s ease
+    }
+
+    .reveal.in {
+      opacity: 1;
+      transform: none
+    }
+
+    .d1 {
+      transition-delay: .08s
+    }
+
+    .d2 {
+      transition-delay: .16s
+    }
+
+    .d3 {
+      transition-delay: .24s
+    }
+
+    .d4 {
+      transition-delay: .32s
+    }
+  </style>
+</head>
+
+<body>
+
+  <nav id="nav">
+    <div class="logo">Nour <span>Zaki</span></div>
+    <div class="navlinks">
+      <a href="#about">About</a>
+      <a href="#work">Work</a>
+      <a href="#experience">Experience</a>
+      <a href="#toolkit">Toolkit</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </nav>
+
+  <!-- ============ HERO ============ -->
+  <header>
+    <div class="wrap">
+      <div class="hero-meta reveal in">
+        <span class="mono">Portfolio — 2026</span>
+        <span class="mono">Staten Island, NY</span>
+      </div>
+      <div class="hero-grid">
+        <div>
+          <h1 class="name reveal in d1">Nour&nbsp;Zaki<em>.</em></h1>
+          <p class="tagline reveal in d2">
+            Computer Science student building <b>machine-learning &amp; computer-vision systems</b> — from
+            medical-imaging AI to full automation pipelines.
+          </p>
+          <div class="cta-row reveal in d3">
+            <a href="#work" class="btn btn-fill">View Work →</a>
+            <a href="#contact" class="btn btn-ghost">Get in touch</a>
+          </div>
+        </div>
+        <div class="hero-side reveal in d3">
+          <div><span class="mono label">Focus</span><span class="val">Applied AI & Computer Vision</span></div>
+          <div><span class="mono label">Studying</span><span class="val">Computer Science</span></div>
+          <div><span class="mono label">Languages</span><span class="val">English · العربية</span></div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============ ABOUT ============ -->
+  <section id="about">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="num">01</span>
+        <h2>About</h2><span class="rule"></span>
+      </div>
+      <div class="about-grid">
+        <div class="reveal d1">
+          <p>I'm a <b>Computer Science</b> major at the <b>College of Staten Island (CUNY)</b>, graduating Spring 2028,
+            with minors in <b>Cybersecurity & Networking, Psychology, and Biology</b> — and a focus on Python,
+            automation, and computer vision.</p>
+          <p>My path here is unusual in a useful way: I came in through the sciences, so I build <b>AI systems for
+              real-world problems</b> — detecting cavities in X-rays, outlining teeth in panoramic scans, rendering 3D
+            anatomy from medical imaging — with the domain knowledge to understand what the models are actually looking
+            at.</p>
+          <p>I also build automation and content systems end-to-end, from concept to a working product. I like
+            deliverables that ship.</p>
+        </div>
+        <div class="facts reveal d2">
+          <div class="fact"><span class="k mono">Role</span><span class="v">Club Rep → President,<br>CSI Pre-Dental
+              Club</span></div>
+          <div class="fact"><span class="k mono">Clinical</span><span class="v">Shadowing,<br>Angel Family
+              Dentistry</span></div>
+          <div class="fact"><span class="k mono">Major</span><span class="v">Computer Science · &rsquo;28</span></div>
+          <div class="fact"><span class="k mono">Minors</span><span class="v">Cybersecurity & Networking ·<br>Psychology
+              · Biology</span></div>
+          <div class="fact"><span class="k mono">Builds</span><span class="v">CV · ML · Automation</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ WORK ============ -->
+  <section id="work">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="num">02</span>
+        <h2>Selected Work</h2><span class="rule"></span>
+      </div>
+      <div class="filter-row reveal d1">
+        <button class="chip active" data-filter="all">All</button>
+        <button class="chip" data-filter="medical">Dental &amp; Medical AI</button>
+        <button class="chip" data-filter="automation">Automation &amp; Systems</button>
+        <button class="chip" data-filter="python">Python Fundamentals</button>
+        <button class="chip" data-filter="leadership">Leadership</button>
+      </div>
+
+      <div class="proj-list reveal d2">
+
+        <!-- 1 -->
+        <div class="proj" data-cat="medical">
+          <div class="proj-head">
+            <span class="proj-num">01</span>
+            <div>
+              <h3 class="proj-title">AI Cavity Detection from Dental X-rays</h3><span class="proj-cat mono">Dental &
+                Medical AI</span>
+            </div>
+            <div class="proj-meta"><span class="proj-year">Computer Vision</span><span class="proj-toggle">+</span>
+            </div>
+          </div>
+          <div class="proj-body">
+            <div class="proj-body-inner">
+              <div>
+                <p class="proj-desc">A classification model that flags likely <b>caries in dental radiographs</b> and
+                  returns a highlighted overlay marking the affected regions — turning a raw X-ray into a quick,
+                  interpretable second opinion for the clinician.</p>
+                <div class="tech"><span>Python</span><span>OpenCV</span><span>Image Classification</span><span>Overlay
+                    Visualization</span></div>
+              </div>
+              <a class="proj-link" href="#">Case study →</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2 -->
+        <div class="proj" data-cat="medical">
+          <div class="proj-head">
+            <span class="proj-num">02</span>
+            <div>
+              <h3 class="proj-title">Panoramic X-ray Tooth-Outline Model</h3><span class="proj-cat mono">Dental &
+                Medical AI</span>
+            </div>
+            <div class="proj-meta"><span class="proj-year">Segmentation</span><span class="proj-toggle">+</span></div>
+          </div>
+          <div class="proj-body">
+            <div class="proj-body-inner">
+              <div>
+                <p class="proj-desc">A model that automatically <b>outlines individual teeth in panoramic
+                    radiographs</b>, separating each tooth from surrounding bone and tissue — a foundation step for
+                  charting, measurement, and downstream diagnostics.</p>
+                <div class="tech"><span>Python</span><span>OpenCV</span><span>Segmentation</span><span>ML
+                    Pipeline</span></div>
+              </div>
+              <a class="proj-link" href="#">Case study →</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4 -->
+        <div class="proj" data-cat="automation">
+          <div class="proj-head">
+            <span class="proj-num">03</span>
+            <div>
+              <h3 class="proj-title">TransScale — YouTube Translation Platform</h3><span
+                class="proj-cat mono">Automation & Systems</span>
+            </div>
+            <div class="proj-meta"><span class="proj-year">React · AI Stack</span><span class="proj-toggle">+</span>
+            </div>
+          </div>
+          <div class="proj-body">
+            <div class="proj-body-inner">
+              <div>
+                <p class="proj-desc">A business and working <b>React dashboard</b> for translating and re-voicing
+                  YouTube videos into Arabic and Spanish markets — chaining transcription, translation, voice synthesis,
+                  and lip-sync into one automated pipeline.</p>
+                <div class="tech"><span>React</span><span>Whisper</span><span>DeepL /
+                    GPT-4</span><span>ElevenLabs</span><span>HeyGen</span><span>FFmpeg</span></div>
+              </div>
+              <a class="proj-link" href="#">Visit →</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 6 -->
+        <div class="proj" data-cat="automation">
+          <div class="proj-head">
+            <span class="proj-num">04</span>
+            <div>
+              <h3 class="proj-title">Viral Shorts Automation Pipeline</h3><span class="proj-cat mono">Automation &
+                Systems</span>
+            </div>
+            <div class="proj-meta"><span class="proj-year">Audio · Video</span><span class="proj-toggle">+</span></div>
+          </div>
+          <div class="proj-body">
+            <div class="proj-body-inner">
+              <div>
+                <p class="proj-desc">An automated pipeline that <b>extracts quotable moments using Whisper</b> and
+                  auto-cuts clips from timestamps, turning long-form video into a steady stream of short-form content
+                  with minimal manual editing.</p>
+                <div class="tech"><span>Python</span><span>Whisper</span><span>FFmpeg</span><span>Automation</span>
+                </div>
+              </div>
+              <a class="proj-link" href="#">Case study →</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 7 -->
+        <div class="proj" data-cat="automation">
+          <div class="proj-head">
+            <span class="proj-num">05</span>
+            <div>
+              <h3 class="proj-title">Finance & Investing Content Channel</h3><span class="proj-cat mono">Automation &
+                Systems</span>
+            </div>
+            <div class="proj-meta"><span class="proj-year">Content System</span><span class="proj-toggle">+</span></div>
+          </div>
+          <div class="proj-body">
+            <div class="proj-body-inner">
+              <div>
+                <p class="proj-desc">A semi-automated <b>finance & investing YouTube channel</b> — building repeatable
+                  systems for research, scripting, and production around investing and market topics.</p>
+                <div class="tech"><span>Automation</span><span>Content Strategy</span><span>Scripting</span></div>
+              </div>
+              <a class="proj-link" href="#">Watch →</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 8 -->
+        <div class="proj" data-cat="python">
+          <div class="proj-head">
+            <span class="proj-num">06</span>
+            <div>
+              <h3 class="proj-title">RC4 Encryption System</h3><span class="proj-cat mono">Python Fundamentals</span>
+            </div>
+            <div class="proj-meta"><span class="proj-year">Cryptography</span><span class="proj-toggle">+</span></div>
+          </div>
+          <div class="proj-body">
+            <div class="proj-body-inner">
+              <div>
+                <p class="proj-desc">An implementation of the <b>RC4 stream cipher from scratch</b> — key scheduling and
+                  pseudo-random keystream generation — to encrypt and decrypt text, built to understand how symmetric
+                  encryption actually works.</p>
+                <div class="tech"><span>Python</span><span>Cryptography</span><span>Algorithms</span></div>
+              </div>
+              <a class="proj-link" href="#">Code →</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 9 -->
+        <div class="proj" data-cat="python">
+          <div class="proj-head">
+            <span class="proj-num">07</span>
+            <div>
+              <h3 class="proj-title">Personal Assistant</h3><span class="proj-cat mono">Python Fundamentals</span>
+            </div>
+            <div class="proj-meta"><span class="proj-year">Automation</span><span class="proj-toggle">+</span></div>
+          </div>
+          <div class="proj-body">
+            <div class="proj-body-inner">
+              <div>
+                <p class="proj-desc">A Python <b>personal assistant</b> that takes commands and automates small everyday
+                  tasks — an exercise in input handling, control flow, and tying together useful utilities.</p>
+                <div class="tech"><span>Python</span><span>Automation</span></div>
+              </div>
+              <a class="proj-link" href="#">Code →</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 10 -->
+        <div class="proj" data-cat="python">
+          <div class="proj-head">
+            <span class="proj-num">08</span>
+            <div>
+              <h3 class="proj-title">Internet Speed Measurement Tool</h3><span class="proj-cat mono">Python
+                Fundamentals</span>
+            </div>
+            <div class="proj-meta"><span class="proj-year">Networking</span><span class="proj-toggle">+</span></div>
+          </div>
+          <div class="proj-body">
+            <div class="proj-body-inner">
+              <div>
+                <p class="proj-desc">A command-line tool that <b>measures and reports internet connection speed</b> —
+                  download, upload, and latency — packaged into a simple, repeatable check.</p>
+                <div class="tech"><span>Python</span><span>Networking</span></div>
+              </div>
+              <a class="proj-link" href="#">Code →</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 11 -->
+        <div class="proj" data-cat="python">
+          <div class="proj-head">
+            <span class="proj-num">09</span>
+            <div>
+              <h3 class="proj-title">Password Generator</h3><span class="proj-cat mono">Python Fundamentals</span>
+            </div>
+            <div class="proj-meta"><span class="proj-year">Utility</span><span class="proj-toggle">+</span></div>
+          </div>
+          <div class="proj-body">
+            <div class="proj-body-inner">
+              <div>
+                <p class="proj-desc">A configurable generator that builds <b>strong, random passwords</b> with
+                  adjustable length and character sets — a clean first look at randomness and string handling.</p>
+                <div class="tech"><span>Python</span><span>Security Basics</span></div>
+              </div>
+              <a class="proj-link" href="#">Code →</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 12 -->
+        <div class="proj" data-cat="python">
+          <div class="proj-head">
+            <span class="proj-num">10</span>
+            <div>
+              <h3 class="proj-title">PDF Reader & Loader</h3><span class="proj-cat mono">Python Fundamentals</span>
+            </div>
+            <div class="proj-meta"><span class="proj-year">Files</span><span class="proj-toggle">+</span></div>
+          </div>
+          <div class="proj-body">
+            <div class="proj-body-inner">
+              <div>
+                <p class="proj-desc">A utility for <b>loading and reading PDF files programmatically</b> in Python —
+                  working with file I/O and document parsing.</p>
+                <div class="tech"><span>Python</span><span>File I/O</span><span>PDF</span></div>
+              </div>
+              <a class="proj-link" href="#">Code →</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 13 -->
+        <div class="proj" data-cat="python">
+          <div class="proj-head">
+            <span class="proj-num">11</span>
+            <div>
+              <h3 class="proj-title">Python Games — Hangman & Mini-Game</h3><span class="proj-cat mono">Python
+                Fundamentals</span>
+            </div>
+            <div class="proj-meta"><span class="proj-year">Games</span><span class="proj-toggle">+</span></div>
+          </div>
+          <div class="proj-body">
+            <div class="proj-body-inner">
+              <div>
+                <p class="proj-desc">A classic <b>Hangman game</b> and a small arcade-style mini-game — practice
+                  projects for game loops, state management, and handling user input.</p>
+                <div class="tech"><span>Python</span><span>Game Logic</span></div>
+              </div>
+              <a class="proj-link" href="#">Code →</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 14 -->
+        <div class="proj" data-cat="python">
+          <div class="proj-head">
+            <span class="proj-num">12</span>
+            <div>
+              <h3 class="proj-title">Keyboard Input Logger Simulation</h3><span class="proj-cat mono">Python
+                Fundamentals</span>
+            </div>
+            <div class="proj-meta"><span class="proj-year">Educational</span><span class="proj-toggle">+</span></div>
+          </div>
+          <div class="proj-body">
+            <div class="proj-body-inner">
+              <div>
+                <p class="proj-desc">An <b>educational simulation</b> exploring how keyboard input events are captured
+                  and handled in Python — built as a learning exercise in event handling.</p>
+                <div class="tech"><span>Python</span><span>Event Handling</span></div>
+              </div>
+              <a class="proj-link" href="#">Code →</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 15 -->
+        <div class="proj" data-cat="leadership">
+          <div class="proj-head">
+            <span class="proj-num">13</span>
+            <div>
+              <h3 class="proj-title">CSI Pre-Dental Club — Rep → President</h3><span
+                class="proj-cat mono">Leadership</span>
+            </div>
+            <div class="proj-meta"><span class="proj-year">2025 — 2027</span><span class="proj-toggle">+</span></div>
+          </div>
+          <div class="proj-body">
+            <div class="proj-body-inner">
+              <div>
+                <p class="proj-desc">Serving as <b>Club Representative (2025–26)</b> and incoming <b>President
+                    (2026–27)</b> — representing members and leading the planning, communication, and coordination of
+                  pre-dental events and initiatives, including the club's re-registration and constitution.</p>
+                <div class="tech"><span>Leadership</span><span>Organization</span><span>Writing</span></div>
+              </div>
+              <a class="proj-link" href="#">More →</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ EXPERIENCE ============ -->
+  <section id="experience">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="num">03</span>
+        <h2>Experience</h2><span class="rule"></span>
+      </div>
+      <div class="exp-list">
+
+        <div class="exp reveal d1">
+          <div class="exp-meta">
+            <span class="mono">Apr 2024 — Present</span>
+            <span class="org">Wendy&rsquo;s</span>
+          </div>
+          <div class="exp-body">
+            <h3>Shift Supervisor</h3>
+            <p>Coordinate team workflow during shifts and support daily front-of-house operations — resolving service
+              issues, keeping orders accurate, and handling cashier duties — while building leadership, communication,
+              and problem-solving on the floor.</p>
+          </div>
+        </div>
+
+        <div class="exp reveal d2">
+          <div class="exp-meta">
+            <span class="mono">Clinical</span>
+            <span class="org">Angel Family Dentistry</span>
+          </div>
+          <div class="exp-body">
+            <h3>Dental Shadowing</h3>
+            <p>Observed clinical procedures and workflow, gaining exposure to infection control and patient-centered
+              care. Prepared treatment areas and organized instruments for procedures such as fillings, keeping the
+              operatory clean and efficient.</p>
+          </div>
+        </div>
+
+        <div class="exp reveal d3">
+          <div class="exp-meta">
+            <span class="mono">Summer 2023 & 2024</span>
+            <span class="org">SYEP</span>
+          </div>
+          <div class="exp-body">
+            <h3>Program Worker — Summer Youth Employment</h3>
+            <p>Managed supplies, schedules, and activities for students across age groups, and helped lead classroom and
+              group sessions — strengthening organization, teamwork, and communication.</p>
+          </div>
+        </div>
+
+        <div class="exp-extra reveal d3">
+          <span class="mono">Also &mdash;</span>
+          <p style="margin-top:8px;color:var(--ink-soft)">National Honor Society (NHS) &nbsp;·&nbsp; Coptic Club
+            &nbsp;·&nbsp; Soccer & Swimming (5 yrs each)</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ TOOLKIT ============ -->
+  <section id="toolkit">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="num">04</span>
+        <h2>Toolkit</h2><span class="rule"></span>
+      </div>
+      <div class="toolkit reveal d1">
+        <div class="tool-col">
+          <h3>AI / Computer Vision</h3>
+          <ul>
+            <li>Python</li>
+            <li>OpenCV</li>
+            <li>Image Classification & Segmentation</li>
+            <li>Computer Vision</li>
+            <li>GPU Training (RTX 4060)</li>
+          </ul>
+        </div>
+        <div class="tool-col">
+          <h3>Automation & Web</h3>
+          <ul>
+            <li>React</li>
+            <li>Whisper</li>
+            <li>DeepL / GPT-4</li>
+            <li>ElevenLabs · HeyGen</li>
+            <li>FFmpeg</li>
+            <li>Workflow Automation</li>
+          </ul>
+        </div>
+        <div class="tool-col">
+          <h3>Tools & Strengths</h3>
+          <ul>
+            <li>Python (6 yrs)</li>
+            <li>Adobe Premiere Pro (3 yrs)</li>
+            <li>Content Creation</li>
+            <li>Research & Technical Writing</li>
+            <li>English & Arabic</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CONTACT ============ -->
+  <section id="contact" class="contact">
+    <div class="wrap">
+      <span class="mono reveal">05 — Contact</span>
+      <h2 class="reveal d1">Let's build something <em>worth showing.</em></h2>
+      <div class="contact-links reveal d2">
+        <a href="mailto:nourmichael2006@gmail.com">Email</a>
+        <a href="https://github.com/light4646" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://www.linkedin.com/in/nour-zaki-3096a537a/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://www.youtube.com/@light_edits4646" target="_blank" rel="noopener">YouTube</a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="wrap">
+      <span class="mono">© 2026 Nour Zaki</span>
+      <span class="mono">Designed & built by Nour Zaki</span>
+    </div>
+  </footer>
+
+  <script>
+    // nav background on scroll
+    const nav = document.getElementById('nav');
+    addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 40));
+
+    // reveal on scroll
+    const io = new IntersectionObserver((es) => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target) } }), { threshold: .12 });
+    document.querySelectorAll('.reveal:not(.in)').forEach(el => io.observe(el));
+
+    // accordion projects
+    document.querySelectorAll('.proj-head').forEach(h => {
+      h.addEventListener('click', () => {
+        const p = h.parentElement, body = h.nextElementSibling;
+        const open = p.classList.contains('open');
+        document.querySelectorAll('.proj.open').forEach(o => { o.classList.remove('open'); o.querySelector('.proj-body').style.maxHeight = null });
+        if (!open) { p.classList.add('open'); body.style.maxHeight = body.scrollHeight + 40 + 'px' }
+      });
+    });
+
+    // filter chips
+    const chips = document.querySelectorAll('.chip'), projs = document.querySelectorAll('.proj');
+    chips.forEach(c => c.addEventListener('click', () => {
+      chips.forEach(x => x.classList.remove('active')); c.classList.add('active');
+      const f = c.dataset.filter;
+      projs.forEach(p => {
+        const show = f === 'all' || p.dataset.cat === f;
+        p.style.display = show ? 'block' : 'none';
+        p.classList.remove('open'); p.querySelector('.proj-body').style.maxHeight = null;
+      });
+    }));
+  </script>
+</body>
+
+</html>
