@@ -391,10 +391,6 @@
 
     .shipped-showcase {
       margin-bottom: 52px;
-      padding: 34px;
-      color: var(--paper);
-      background: var(--ink);
-      border-radius: 4px;
     }
 
     .shipped-head {
@@ -406,7 +402,7 @@
     }
 
     .shipped-head .mono {
-      color: #79cbb7;
+      color: var(--accent);
       display: block;
       margin-bottom: 8px;
     }
@@ -420,38 +416,14 @@
       max-width: 18ch;
     }
 
-    .shipped-head .proj-link {
-      color: var(--paper);
-      border-color: #79cbb7;
-    }
-
     .app-grid {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 28px;
-    }
-
-    /* Registered so the hover glow can interpolate instead of snapping. */
-    @property --card-glow {
-      syntax: "<number>";
-      inherits: false;
-      initial-value: .055;
+      gap: 48px;
     }
 
     .app-card {
       min-width: 0;
-      padding: 24px;
-      /* closest-side keeps the glow fully inscribed in the card, so it
-         melts into the showcase ink with no panel edges or seam lines */
-      background: radial-gradient(closest-side at 50% 42%,
-          rgba(245, 242, 234, var(--card-glow, .055)),
-          rgba(245, 242, 234, 0));
-      color: var(--paper);
-      transition: --card-glow .3s ease;
-    }
-
-    .app-card:hover {
-      --card-glow: .09;
     }
 
     .app-card img {
@@ -460,12 +432,8 @@
       height: 72px;
       object-fit: cover;
       border-radius: 16px;
-      box-shadow: 0 10px 24px rgba(0, 0, 0, .26);
+      box-shadow: 0 10px 24px rgba(26, 25, 22, .14);
       margin-bottom: 24px;
-    }
-
-    .app-card .mono {
-      color: #8e897e;
     }
 
     .app-card h4 {
@@ -478,21 +446,26 @@
 
     .app-card p {
       min-height: 5em;
-      color: #bbb5a9;
+      color: var(--ink-soft);
       font-size: .93rem;
       line-height: 1.55;
       margin-bottom: 18px;
     }
 
     .app-card a {
-      color: var(--paper);
+      color: var(--ink);
       text-decoration: none;
       font-family: "JetBrains Mono", monospace;
       font-size: .68rem;
       letter-spacing: .08em;
       text-transform: uppercase;
-      border-bottom: 1px solid #79cbb7;
+      border-bottom: 1px solid var(--accent);
       padding-bottom: 3px;
+      transition: color .2s;
+    }
+
+    .app-card a:hover {
+      color: var(--accent);
     }
 
     .proj-light {
@@ -509,7 +482,7 @@
     @media(max-width:860px) {
       .app-grid {
         grid-template-columns: 1fr;
-        gap: 34px;
+        gap: 44px;
       }
 
       .app-card {
@@ -530,12 +503,6 @@
     }
 
     @media(max-width:560px) {
-      .shipped-showcase {
-        padding: 22px;
-        margin-left: -12px;
-        margin-right: -12px;
-      }
-
       .shipped-head {
         grid-template-columns: 1fr;
       }
