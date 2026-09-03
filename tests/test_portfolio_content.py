@@ -49,13 +49,62 @@ class PortfolioContentTests(unittest.TestCase):
         self.assertIn("history.replaceState(null, '', location.pathname + location.search)", HTML)
         self.assertIn("scrollTo({ top: 0, left: 0, behavior: 'instant' })", HTML)
 
-    def test_app_cards_remain_flush_when_hovered(self):
+    def test_app_grid_has_no_frame_border_or_seam_chrome(self):
+        grid_rules = re.findall(r"\.app-grid\s*\{([^}]*)\}", HTML)
+        self.assertTrue(grid_rules, "Missing .app-grid rule")
+        for body in grid_rules:
+            self.assertNotRegex(
+                body,
+                r"background[^;:]*:",
+                "a painted .app-grid surface shows through the gaps as divider seams",
+            )
+            self.assertNotRegex(
+                body,
+                r"(?:\bborder[^;:]*|\boutline[^;:]*|box-shadow)\s*:",
+                "nothing may draw a hard outer rectangle around the app grid",
+            )
+        gap = re.search(r"gap:\s*([\d.]+)px", grid_rules[0])
+        self.assertIsNotNone(gap, "Expected a px gap between app cards")
+        self.assertGreaterEqual(
+            float(gap.group(1)),
+            16,
+            "hairline gaps read as panel seam lines; separate cards with real spacing",
+        )
+
+    def test_app_cards_fade_into_the_showcase_instead_of_boxed_panel_fills(self):
+        card_rules = re.findall(r"\.app-card\s*\{([^}]*)\}", HTML)
+        self.assertTrue(card_rules, "Missing .app-card rule")
+        for body in card_rules:
+            self.assertNotRegex(
+                body,
+                r"background[^;:]*:\s*#",
+                "a solid fill reads as a panel pasted onto the showcase ink",
+            )
+            self.assertNotRegex(body, r"\bborder[^;:]*:", "cards must not be outlined boxes")
+        base_rule = card_rules[0]
+        self.assertRegex(
+            base_rule,
+            r"background\s*:[^;]*gradient",
+            "cards should keep a deliberate soft tonal gradient, not vanish entirely",
+        )
+        self.assertRegex(
+            base_rule,
+            r"rgba\([^)]*,\s*0\s*\)|transparent",
+            "the card gradient must fade fully into the surrounding showcase ink",
+        )
+
+    def test_app_card_hover_response_stays_soft_and_boxless(self):
         hover_rule = re.search(r"\.app-card:hover\s*\{([^}]*)\}", HTML, re.DOTALL)
-        if hover_rule is None:
-            self.fail("Missing .app-card:hover rule")
+        self.assertIsNotNone(hover_rule, "Missing .app-card:hover rule — keep a subtle hover response")
         declarations = hover_rule.group(1)
         self.assertNotIn("translate", declarations)
-        self.assertRegex(declarations, r"background:\s*#26251f")
+        self.assertNotIn("scale(", declarations)
+        self.assertNotRegex(
+            declarations,
+            r"background[^;:]*:\s*#",
+            "hover must intensify the fade, not repaint the card as a solid box",
+        )
+        self.assertRegex(declarations, r"[\w-]+\s*:", "hover rule must declare an actual response")
 
 
 if __name__ == "__main__":
