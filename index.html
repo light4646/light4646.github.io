@@ -428,21 +428,30 @@
     .app-grid {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 1px;
-      background: #3b3933;
-      border: 1px solid #3b3933;
+      gap: 28px;
+    }
+
+    /* Registered so the hover glow can interpolate instead of snapping. */
+    @property --card-glow {
+      syntax: "<number>";
+      inherits: false;
+      initial-value: .055;
     }
 
     .app-card {
       min-width: 0;
       padding: 24px;
-      background: #23221e;
+      /* closest-side keeps the glow fully inscribed in the card, so it
+         melts into the showcase ink with no panel edges or seam lines */
+      background: radial-gradient(closest-side at 50% 42%,
+          rgba(245, 242, 234, var(--card-glow, .055)),
+          rgba(245, 242, 234, 0));
       color: var(--paper);
-      transition: background .25s;
+      transition: --card-glow .3s ease;
     }
 
     .app-card:hover {
-      background: #26251f;
+      --card-glow: .09;
     }
 
     .app-card img {
@@ -500,6 +509,7 @@
     @media(max-width:860px) {
       .app-grid {
         grid-template-columns: 1fr;
+        gap: 34px;
       }
 
       .app-card {
