@@ -7,6 +7,7 @@
   <title>Nour Zaki — Computer Science · ML & Computer Vision</title>
   <meta name="description"
     content="Nour Zaki — Computer Science student building machine-learning and computer-vision systems, from medical-imaging AI to automation pipelines.">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
@@ -386,6 +387,157 @@
       background: var(--ink);
       color: var(--paper);
       border-color: var(--ink)
+    }
+
+    .shipped-showcase {
+      margin-bottom: 52px;
+      padding: 34px;
+      color: var(--paper);
+      background: var(--ink);
+      border-radius: 4px;
+    }
+
+    .shipped-head {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 28px;
+      align-items: end;
+      margin-bottom: 28px;
+    }
+
+    .shipped-head .mono {
+      color: #79cbb7;
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .shipped-head h3 {
+      font-family: "Fraunces", serif;
+      font-size: clamp(1.8rem, 4vw, 3rem);
+      font-weight: 500;
+      letter-spacing: -.025em;
+      line-height: 1.05;
+      max-width: 18ch;
+    }
+
+    .shipped-head .proj-link {
+      color: var(--paper);
+      border-color: #79cbb7;
+    }
+
+    .app-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1px;
+      background: #3b3933;
+      border: 1px solid #3b3933;
+    }
+
+    .app-card {
+      min-width: 0;
+      padding: 24px;
+      background: #23221e;
+      color: var(--paper);
+      transition: background .25s, transform .25s;
+    }
+
+    .app-card:hover {
+      background: #2b2a25;
+      transform: translateY(-3px);
+    }
+
+    .app-card img {
+      display: block;
+      width: 72px;
+      height: 72px;
+      object-fit: cover;
+      border-radius: 16px;
+      box-shadow: 0 10px 24px rgba(0, 0, 0, .26);
+      margin-bottom: 24px;
+    }
+
+    .app-card .mono {
+      color: #8e897e;
+    }
+
+    .app-card h4 {
+      font-family: "Fraunces", serif;
+      font-size: 1.35rem;
+      font-weight: 500;
+      line-height: 1.15;
+      margin: 8px 0 10px;
+    }
+
+    .app-card p {
+      min-height: 5em;
+      color: #bbb5a9;
+      font-size: .93rem;
+      line-height: 1.55;
+      margin-bottom: 18px;
+    }
+
+    .app-card a {
+      color: var(--paper);
+      text-decoration: none;
+      font-family: "JetBrains Mono", monospace;
+      font-size: .68rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      border-bottom: 1px solid #79cbb7;
+      padding-bottom: 3px;
+    }
+
+    .proj-light {
+      margin: 28px 0;
+      border: 1px solid rgba(15, 109, 89, .35);
+      background: linear-gradient(110deg, rgba(15, 109, 89, .09), rgba(15, 109, 89, .015));
+    }
+
+    .proj-light .proj-num {
+      color: var(--accent);
+      font-size: 1rem;
+    }
+
+    @media(max-width:860px) {
+      .app-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .app-card {
+        display: grid;
+        grid-template-columns: 72px 1fr;
+        column-gap: 20px;
+        align-items: start;
+      }
+
+      .app-card img {
+        grid-row: 1 / span 4;
+        margin: 0;
+      }
+
+      .app-card p {
+        min-height: 0;
+      }
+    }
+
+    @media(max-width:560px) {
+      .shipped-showcase {
+        padding: 22px;
+        margin-left: -12px;
+        margin-right: -12px;
+      }
+
+      .shipped-head {
+        grid-template-columns: 1fr;
+      }
+
+      .app-card {
+        display: block;
+      }
+
+      .app-card img {
+        margin-bottom: 20px;
+      }
     }
 
     .proj {
@@ -822,10 +974,51 @@
       </div>
       <div class="filter-row reveal d1">
         <button class="chip active" data-filter="all">All</button>
+        <button class="chip" data-filter="ios">iOS Apps</button>
         <button class="chip" data-filter="medical">Dental &amp; Medical AI</button>
         <button class="chip" data-filter="automation">Automation &amp; Systems</button>
         <button class="chip" data-filter="python">Python Fundamentals</button>
         <button class="chip" data-filter="leadership">Leadership</button>
+      </div>
+
+      <div class="shipped-showcase reveal d2">
+        <div class="shipped-head">
+          <div>
+            <span class="mono">Live on the App Store</span>
+            <h3>Three apps. Built and shipped by one developer.</h3>
+          </div>
+          <a class="proj-link" href="https://apps.apple.com/us/developer/nour-zaki/id6780739541" target="_blank"
+            rel="noopener">View Apple portfolio →</a>
+        </div>
+        <div class="app-grid">
+          <article class="app-card" data-cat="ios">
+            <img src="assets/apps/caduceus.jpg" alt="Caduceus app icon" width="72" height="72">
+            <span class="mono">Education · MCAT</span>
+            <h4>Caduceus — MCAT Arena</h4>
+            <p>Turns MCAT prep into a daily game with missions, score tracking, streaks, and live competitive
+              leaderboards.</p>
+            <a href="https://apps.apple.com/us/app/caduceus-mcat-arena/id6780739539" target="_blank"
+              rel="noopener">View on App Store →</a>
+          </article>
+          <article class="app-card" data-cat="ios">
+            <img src="assets/apps/crown.jpg" alt="Crown app icon" width="72" height="72">
+            <span class="mono">Education · DAT</span>
+            <h4>Crown — DAT Arena</h4>
+            <p>A competitive DAT study platform spanning every exam section, full-length trends, rival weeks, and
+              progress rewards.</p>
+            <a href="https://apps.apple.com/us/app/crown-dat-arena/id6783618704" target="_blank"
+              rel="noopener">View on App Store →</a>
+          </article>
+          <article class="app-card" data-cat="ios">
+            <img src="assets/apps/apex.jpg" alt="Apex app icon" width="72" height="72">
+            <span class="mono">Productivity · Focus</span>
+            <h4>Apex — Focus Racing</h4>
+            <p>Makes every focus session a race across real circuits, with AI rivals, championships, live duels, and
+              lock-screen controls.</p>
+            <a href="https://apps.apple.com/us/app/apex-focus-racing/id6784372545" target="_blank"
+              rel="noopener">View on App Store →</a>
+          </article>
+        </div>
       </div>
 
       <div class="proj-list reveal d2">
@@ -998,22 +1191,27 @@
         </div>
 
         <!-- 9 -->
-        <div class="proj" data-cat="python">
+        <div class="proj proj-light" data-cat="automation">
           <div class="proj-head">
-            <span class="proj-num">07</span>
+            <span class="proj-num">✦</span>
             <div>
-              <h3 class="proj-title">Personal Assistant</h3><span class="proj-cat mono">Python Fundamentals</span>
+              <h3 class="proj-title">Light — Personal AI Operating System</h3><span class="proj-cat mono">Featured · AI
+                Systems &amp; Automation</span>
             </div>
-            <div class="proj-meta"><span class="proj-year">Automation</span><span class="proj-toggle">+</span></div>
+            <div class="proj-meta"><span class="proj-year">Built · In active use</span><span class="proj-toggle">+</span>
+            </div>
           </div>
           <div class="proj-body">
             <div class="proj-body-inner">
               <div>
-                <p class="proj-desc">A Python <b>personal assistant</b> that takes commands and automates small everyday
-                  tasks — an exercise in input handling, control flow, and tying together useful utilities.</p>
-                <div class="tech"><span>Python</span><span>Automation</span></div>
+                <p class="proj-desc">A functioning <b>personal AI operating system</b> that I built and continuously
+                  upgrade—not a chatbot demo. Light connects persistent memory, tool orchestration, scheduled
+                  automations, coding workflows, research, and everyday planning into one system that supports real
+                  work across my devices.</p>
+                <div class="tech"><span>Python</span><span>Agentic AI</span><span>Persistent Memory</span><span>Tool
+                    Orchestration</span><span>Scheduled Automations</span><span>Coding Workflows</span></div>
               </div>
-              <a class="proj-link" href="#">Code →</a>
+              <a class="proj-link" href="https://github.com/light4646" target="_blank" rel="noopener">GitHub →</a>
             </div>
           </div>
         </div>
@@ -1294,15 +1492,19 @@
     });
 
     // filter chips
-    const chips = document.querySelectorAll('.chip'), projs = document.querySelectorAll('.proj');
+    const chips = document.querySelectorAll('.chip'), projs = document.querySelectorAll('[data-cat]');
     chips.forEach(c => c.addEventListener('click', () => {
       chips.forEach(x => x.classList.remove('active')); c.classList.add('active');
       const f = c.dataset.filter;
       projs.forEach(p => {
         const show = f === 'all' || p.dataset.cat === f;
         p.style.display = show ? 'block' : 'none';
-        p.classList.remove('open'); p.querySelector('.proj-body').style.maxHeight = null;
+        p.classList.remove('open');
+        const body = p.querySelector('.proj-body');
+        if (body) body.style.maxHeight = null;
       });
+      const showcase = document.querySelector('.shipped-showcase');
+      showcase.style.display = f === 'all' || f === 'ios' ? 'block' : 'none';
     }));
   </script>
 </body>
