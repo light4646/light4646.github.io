@@ -71,40 +71,76 @@ class PortfolioContentTests(unittest.TestCase):
             "hairline gaps read as panel seam lines; separate cards with real spacing",
         )
 
-    def test_app_cards_fade_into_the_showcase_instead_of_boxed_panel_fills(self):
-        card_rules = re.findall(r"\.app-card\s*\{([^}]*)\}", HTML)
+    def test_shipped_showcase_paints_no_panel_on_the_cream_page(self):
+        showcase_rules = re.findall(r"\.shipped-showcase\s*\{([^{}]*)\}", HTML)
+        self.assertTrue(showcase_rules, "Missing .shipped-showcase rule")
+        for body in showcase_rules:
+            self.assertNotRegex(
+                body,
+                r"background[^;:]*:",
+                "the showcase must not paint its own panel — it sits directly on the cream page",
+            )
+            self.assertNotRegex(
+                body,
+                r"(?:\bborder[^;:]*|box-shadow)\s*:",
+                "no panel chrome: the open section may not draw edges, radii, or shadows",
+            )
+            self.assertNotRegex(
+                body,
+                r"margin-(?:left|right)\s*:\s*-",
+                "negative panel-bleed margins must go with the panel (overflow risk on the open page)",
+            )
+
+    def test_app_entries_paint_no_card_surface_on_the_open_page(self):
+        self.assertNotIn("--card-glow", HTML, "the card glow belongs to the retired dark panel")
+        card_rules = re.findall(r"\.app-card(?::hover)?\s*\{([^{}]*)\}", HTML)
         self.assertTrue(card_rules, "Missing .app-card rule")
         for body in card_rules:
             self.assertNotRegex(
                 body,
-                r"background[^;:]*:\s*#",
-                "a solid fill reads as a panel pasted onto the showcase ink",
+                r"background[^;:]*:",
+                "app entries must not paint gradients or fills — three open columns, not three cards",
             )
-            self.assertNotRegex(body, r"\bborder[^;:]*:", "cards must not be outlined boxes")
-        base_rule = card_rules[0]
-        self.assertRegex(
-            base_rule,
-            r"background\s*:[^;]*gradient",
-            "cards should keep a deliberate soft tonal gradient, not vanish entirely",
-        )
-        self.assertRegex(
-            base_rule,
-            r"rgba\([^)]*,\s*0\s*\)|transparent",
-            "the card gradient must fade fully into the surrounding showcase ink",
-        )
+            self.assertNotRegex(
+                body,
+                r"(?:\bborder[^;:]*|box-shadow)\s*:",
+                "app entries must not be outlined or shadowed boxes",
+            )
 
-    def test_app_card_hover_response_stays_soft_and_boxless(self):
-        hover_rule = re.search(r"\.app-card:hover\s*\{([^}]*)\}", HTML, re.DOTALL)
-        self.assertIsNotNone(hover_rule, "Missing .app-card:hover rule — keep a subtle hover response")
-        declarations = hover_rule.group(1)
-        self.assertNotIn("translate", declarations)
-        self.assertNotIn("scale(", declarations)
-        self.assertNotRegex(
-            declarations,
-            r"background[^;:]*:\s*#",
-            "hover must intensify the fade, not repaint the card as a solid box",
+    def test_showcase_text_uses_cream_page_ink_and_accent_tokens(self):
+        for dark_panel_color in ("#79cbb7", "#bbb5a9", "#8e897e"):
+            self.assertNotIn(
+                dark_panel_color,
+                HTML,
+                f"{dark_panel_color} is dark-panel palette; the open section uses cream-page tokens",
+            )
+        scoped_rules = re.findall(
+            r"(\.(?:shipped-showcase|shipped-head|app-card)[^{}<>\"']*)\{([^{}]*)\}", HTML
         )
-        self.assertRegex(declarations, r"[\w-]+\s*:", "hover rule must declare an actual response")
+        self.assertTrue(scoped_rules, "Missing showcase CSS rules")
+        for selector, body in scoped_rules:
+            for value in re.findall(r"(?<![\w-])color\s*:\s*([^;}]+)", body):
+                self.assertRegex(
+                    value.strip(),
+                    r"^(?:var\(--(?:ink|ink-soft|accent|accent-deep)\)|inherit)$",
+                    f"{selector.strip()} text must use the cream-page ink/accent tokens for readability",
+                )
+
+    def test_app_card_hover_never_repaints_a_surface(self):
+        hover_rule = re.search(r"\.app-card:hover\s*\{([^{}]*)\}", HTML)
+        if hover_rule is not None:
+            declarations = hover_rule.group(1)
+            self.assertNotRegex(
+                declarations,
+                r"background[^;:]*:",
+                "hover must not summon a card surface on the open page",
+            )
+            self.assertNotIn(
+                "--card-glow",
+                declarations,
+                "hover must not re-arm the retired dark-panel glow",
+            )
+            self.assertNotRegex(declarations, r"box-shadow\s*:")
 
 
 if __name__ == "__main__":
