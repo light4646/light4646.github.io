@@ -44,6 +44,19 @@ class PortfolioContentTests(unittest.TestCase):
         self.assertIn('data-filter="ios"', HTML)
         self.assertGreaterEqual(HTML.count('data-cat="ios"'), 3)
 
+    def test_fresh_page_load_settles_on_the_nour_zaki_hero(self):
+        self.assertIn('id="home"', HTML)
+        self.assertIn("history.replaceState(null, '', location.pathname + location.search)", HTML)
+        self.assertIn("scrollTo({ top: 0, left: 0, behavior: 'instant' })", HTML)
+
+    def test_app_cards_remain_flush_when_hovered(self):
+        hover_rule = re.search(r"\.app-card:hover\s*\{([^}]*)\}", HTML, re.DOTALL)
+        if hover_rule is None:
+            self.fail("Missing .app-card:hover rule")
+        declarations = hover_rule.group(1)
+        self.assertNotIn("translate", declarations)
+        self.assertRegex(declarations, r"background:\s*#26251f")
+
 
 if __name__ == "__main__":
     unittest.main()

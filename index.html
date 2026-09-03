@@ -438,12 +438,11 @@
       padding: 24px;
       background: #23221e;
       color: var(--paper);
-      transition: background .25s, transform .25s;
+      transition: background .25s;
     }
 
     .app-card:hover {
-      background: #2b2a25;
-      transform: translateY(-3px);
+      background: #26251f;
     }
 
     .app-card img {
@@ -905,7 +904,7 @@
   </nav>
 
   <!-- ============ HERO ============ -->
-  <header>
+  <header id="home">
     <div class="wrap">
       <div class="hero-meta reveal in">
         <span class="mono">Portfolio — 2026</span>
@@ -1473,6 +1472,17 @@
   </footer>
 
   <script>
+    // Fresh visits always introduce Nour first, even from a previously shared section URL.
+    // Hash navigation continues to work normally after the page has loaded.
+    if (location.hash) {
+      history.replaceState(null, '', location.pathname + location.search);
+      const settleOnHome = () => {
+        if (!location.hash) scrollTo({ top: 0, left: 0, behavior: 'instant' });
+      };
+      settleOnHome();
+      requestAnimationFrame(settleOnHome);
+    }
+
     // nav background on scroll
     const nav = document.getElementById('nav');
     addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 40));
